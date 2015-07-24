@@ -45,4 +45,4 @@ end
 
 gem 'paperclip'
 gem 'versionist'
-gem 'active_model_serializers'
+gem 'active_model_serializers', '~> 0.8.0'
