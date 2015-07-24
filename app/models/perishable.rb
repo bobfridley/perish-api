@@ -1,7 +1,10 @@
 require 'crypto'
 
 class Perishable < ActiveRecord::Base
-  has_attached_file :document, styles: { original: {} }, processors: [:encrypt]
+  has_attached_file :document,
+      styles: { original: {} },
+      processors: [:encrypt],
+      path: '/:class/:attachment/:digest/:filename'
 
   validates_attachment :document, presence: true, size: { less_than: 100.megabytes }
   do_not_validate_attachment_file_type :document
@@ -14,7 +17,7 @@ class Perishable < ActiveRecord::Base
     return nil unless params.include?(:key) && params.include?(:iv)
 
     begin
-      tmp = Crypto::decrypt params.merge(file: File.new(document.path))
+      tmp = Crypto::decrypt params.merge(file: Paperclip.io_adapters.for(document))
       if calculate_digest(tmp.path) == digest
         tmp
       else

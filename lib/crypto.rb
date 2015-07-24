@@ -1,4 +1,5 @@
 module Crypto
+  BUF_SIZE = 16384
 
   def self.encrypt(file)
     cipher = OpenSSL::Cipher::AES256.new :CBC
@@ -9,7 +10,7 @@ module Crypto
 
     tmp = Tempfile.new file.original_filename
     tmp.binmode
-    while buf = file.read(16384)
+    while buf = file.read(BUF_SIZE)
       tmp << cipher.update(buf)
     end
     tmp << cipher.final
@@ -27,9 +28,9 @@ module Crypto
     decipher.iv = hex_to_bin options[:iv]
 
     file = options[:file]
-    tmp = Tempfile.new File.basename(file)
+    tmp = Tempfile.new file.original_filename
     tmp.binmode
-    while buf = file.read(16384)
+    while buf = file.read(BUF_SIZE)
       tmp << decipher.update(buf)
     end
     tmp << decipher.final

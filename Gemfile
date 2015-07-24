@@ -47,5 +47,6 @@ group :development, :test do
 end
 
 gem 'paperclip'
+gem 'aws-sdk', '~> 1.6'
 gem 'versionist'
 gem 'active_model_serializers', '~> 0.8.0'
