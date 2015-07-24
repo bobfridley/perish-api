@@ -1,10 +1,12 @@
 class Perishable < ActiveRecord::Base
-  has_attached_file :document
+  has_attached_file :document, styles: { original: {} }, processors: [:encrypt]
 
   validates_attachment :document, presence: true, size: { less_than: 100.megabytes }
   do_not_validate_attachment_file_type :document
 
   before_post_process :generate_digest
+
+  attr_accessor :key, :iv
 
   private
 

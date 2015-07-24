@@ -15,7 +15,7 @@ class V1::PerishablesController < V1::BaseController
   def create
     @perishable = Perishable.new perishable_params
     if @perishable.save
-      render json: @perishable, status: :created
+      render json: @perishable, include_crypto: true, status: :created
     else
       render json: @perishable.errors, status: :unprocessable_entity
     end
