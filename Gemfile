@@ -46,4 +46,6 @@ group :development, :test do
   gem 'spring'
 end
 
-
+gem 'paperclip'
+gem 'versionist'
+gem 'active_model_serializers'
