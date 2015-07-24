@@ -3,7 +3,7 @@ class V1::PerishablesController < V1::BaseController
     perishable = Perishable.find_by id: params[:id]
 
     if perishable
-      render json: perishable, status: :ok
+      send_file perishable.document.path, type: perishable.document.content_type
     else
       render json: { error: 'not found' }, status: :not_found
     end
