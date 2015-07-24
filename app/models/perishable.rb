@@ -9,6 +9,9 @@ class Perishable < ActiveRecord::Base
   private
 
   def generate_digest
-    self.digest = Digest::SHA256.file(document.queued_for_write[:original].path).hexdigest
+    sha256 = Digest::SHA256.file document.queued_for_write[:original].path
+    self.salt = SecureRandom.hex
+    sha256.update salt
+    self.digest = sha256.hexdigest
   end
 end
