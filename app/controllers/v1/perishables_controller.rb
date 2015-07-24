@@ -1,6 +1,6 @@
 class V1::PerishablesController < V1::BaseController
   def show
-    @perishable = Perishable.find_by id: params[:id]
+    @perishable = Perishable.find_by digest: params[:id]
 
     if @perishable
       File.open(@perishable.document.path, 'r') do |f|
