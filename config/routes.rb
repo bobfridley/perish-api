@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   api_version(module: "V1", header: { name: "Accept", value: "application/vnd.perish.com; version=1"}, parameter: { name: "version", value: "1"}, path: { value: "v1" }, defaults: { format: :json }, default: true) do
-    resources :perishables, only: [:show, :create]
+    resources :perishables, only: [:show, :create] do
+      resource :download, only: [:create]
+    end
   end
 
   match '/404', to: 'errors#not_found', via: :all, defaults: { format: :json }
