@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   api_version(module: "V1", header: { name: "Accept", value: "application/vnd.perish.com; version=1"}, parameter: { name: "version", value: "1"}, path: { value: "v1" }, defaults: { format: :json }, default: true) do
     resources :perishables, only: [:show, :create]
   end
+
+  match '/404', to: 'errors#not_found', via: :all, defaults: { format: :json }
+  match '/422', to: 'errors#unprocessable_entity', via: :all, defaults: { format: :json }
+  match '/500', to: 'errors#internal_server_error', via: :all, defaults: { format: :json }
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
