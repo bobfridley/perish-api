@@ -13,16 +13,23 @@ module Paperclip
   end
 end
 
-Paperclip::Attachment.default_options.merge!(
+if Rails.env.production?
+  Paperclip::Attachment.default_options.merge!(
     storage: :s3,
     s3_credentials: {
-        bucket: "perish-#{Rails.env}",
-        access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+      bucket: "perish-#{Rails.env}",
+      access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+      secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
     },
     s3_permissions: :private,
     path: '/:class/:attachment/:id/:style_:filename',
-)
+  )
+else
+  Paperclip::Attachment.default_options.merge!(
+    storage: :filesystem,
+    url: '/system/:class/:attachment/:id/:style_:filename',
+  )
+end
 
 Paperclip.interpolates :digest do |attachment, style|
   attachment.instance.digest

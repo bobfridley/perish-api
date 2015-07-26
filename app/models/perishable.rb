@@ -3,16 +3,26 @@ require 'crypto'
 class Perishable < ActiveRecord::Base
   MAX_FILE_SIZE_MB = ENV.fetch('MAX_FILE_SIZE_MB', 200).to_f
 
-  has_attached_file :document,
+  def self.paperclip_options
+    options = {
       styles: { original: {} },
       processors: [:encrypt],
-      path: '/:class/:attachment/:digest/:filename'
+      url: '/system/:class/:attachment/:digest/:filename'
+    }
+    options[:path] = '/:class/:attachment/:digest/:filename' if Rails.env.produciton?
+    options
+  end
+
+  has_attached_file :document, paperclip_options
 
   validates_attachment :document, presence: true, size: { less_than: MAX_FILE_SIZE_MB.megabytes }
   do_not_validate_attachment_file_type :document
   validate :server_must_have_space
 
   before_post_process :generate_digest
+
+  validates :digest, presence: true, uniqueness: true
+  validates :salt, presence: true
 
   attr_accessor :key, :iv
 
