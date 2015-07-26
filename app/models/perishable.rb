@@ -1,13 +1,16 @@
 require 'crypto'
 
 class Perishable < ActiveRecord::Base
+  MAX_FILE_SIZE_MB = ENV.fetch('MAX_FILE_SIZE_MB', 200).to_f
+
   has_attached_file :document,
       styles: { original: {} },
       processors: [:encrypt],
       path: '/:class/:attachment/:digest/:filename'
 
-  validates_attachment :document, presence: true, size: { less_than: 100.megabytes }
+  validates_attachment :document, presence: true, size: { less_than: MAX_FILE_SIZE_MB.megabytes }
   do_not_validate_attachment_file_type :document
+  validate :server_must_have_space
 
   before_post_process :generate_digest
 
@@ -29,6 +32,10 @@ class Perishable < ActiveRecord::Base
   end
 
   private
+
+  def server_must_have_space
+    errors.add(:document_file_size, 'server is full') if Perishable.sum(:document_file_size) + document_file_size > ENV.fetch('SERVER_STORAGE_SIZE_GB', 4).to_f.gigabytes
+  end
 
   def generate_digest
     self.salt = SecureRandom.hex
