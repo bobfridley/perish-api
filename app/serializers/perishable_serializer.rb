@@ -1,10 +1,14 @@
 class PerishableSerializer < ActiveModel::Serializer
   include ActionView::Helpers::NumberHelper
 
-  attributes :digest, :name, :size, :url, :download_url
+  attributes :name, :content_type, :size, :digest, :url, :download_url
 
   def name
     object.document_file_name
+  end
+
+  def content_type
+    object.document_content_type
   end
 
   def size

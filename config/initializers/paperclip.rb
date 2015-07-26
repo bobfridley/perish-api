@@ -1,9 +1,14 @@
-require 'paperclip/media_type_spoof_detector'
-
 module Paperclip
-  class MediaTypeSpoofDetector
-    def spoofed?
-      false
+  module Validators
+    module HelperMethods
+      def validates_media_type_spoof_detection(*attr_names)
+        options = _merge_attributes(attr_names)
+        # Commenting out this line so it doesn't run the validator after
+        # post processing, because it will always fail since every file is
+        # converted to a binary file through encryption.
+        # validates_with MediaTypeSpoofDetectionValidator, options.dup
+        validate_before_processing MediaTypeSpoofDetectionValidator, options.dup
+      end
     end
   end
 end
