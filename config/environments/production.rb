@@ -76,4 +76,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Throttle requests
+  config.middleware.use Rack::Throttle::Interval
 end
