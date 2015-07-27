@@ -5,8 +5,8 @@ module Crypto
     cipher = OpenSSL::Cipher::AES256.new :CBC
     cipher.encrypt
 
-    key = bin_to_hex cipher.random_key
-    iv = bin_to_hex cipher.random_iv
+    key = Base64.urlsafe_encode64 cipher.random_key
+    iv = Base64.urlsafe_encode64 cipher.random_iv
 
     tmp = Tempfile.new file.original_filename
     tmp.binmode
@@ -24,8 +24,8 @@ module Crypto
     decipher = OpenSSL::Cipher::AES256.new :CBC
     decipher.decrypt
 
-    decipher.key = hex_to_bin options[:key]
-    decipher.iv = hex_to_bin options[:iv]
+    decipher.key = Base64.urlsafe_decode64 options[:key]
+    decipher.iv = Base64.urlsafe_decode64 options[:iv]
 
     file = options[:file]
     tmp = Tempfile.new file.original_filename
@@ -38,16 +38,6 @@ module Crypto
     tmp.rewind
 
     tmp
-  end
-
-  private
-
-  def self.bin_to_hex(s)
-    s.each_byte.map { |b| b.to_s(16).rjust(2, '0') }.join
-  end
-
-  def self.hex_to_bin(s)
-    s.scan(/../).map { |x| x.hex.chr }.join
   end
 
 end

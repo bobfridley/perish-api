@@ -55,6 +55,6 @@ class Perishable < ActiveRecord::Base
   def calculate_digest(path)
     sha256 = Digest::SHA256.file path
     sha256.update salt
-    sha256.hexdigest
+    Base64.urlsafe_encode64 sha256.digest
   end
 end
