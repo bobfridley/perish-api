@@ -1,45 +1,76 @@
 # Perish API
-***
-### Upload a File
+
+### Upload a File [POST http://api.perish.me/perishables]
+
 #### Request
 ```bash
-curl -F "document=@/home/marvin/Downloads/test.mp3;type=audio/mp3" https://perish-api.herokuapp.com/perishables
+curl -F "document=@/home/marvin/Downloads/test.mp3;type=audio/mp3" http://api.perish.me/perishables
 ```
+
 #### Response
 ```json
 {
-    "name":"test.mp3",
-    "content_type":"audio/mp3",
-    "size":"7.91 MB",
-    "digest":"dc6c91137119de341c569242c0f70af4148a46c8d73174f3c0fa9befd5352b47",
-    "url":"https://perish-api.herokuapp.com/perishables/dc6c91137119de341c569242c0f70af4148a46c8d73174f3c0fa9befd5352b47",
-    "download_url":"https://perish-api.herokuapp.com/perishables/dc6c91137119de341c569242c0f70af4148a46c8d73174f3c0fa9befd5352b47/download",
-    "key":"18b3579d0e06edbf740658169a6f8aebea4d4da149d587a71fdb1a1d491cd601",
-    "iv":"88d64b96384ebcc371a5aaf0951069a9"
+    "name": "perish.png",
+    "content_type": "image/png",
+    "size": "14.3 KB",
+    "digest": "4xX-tWXrZtEbPmA5gj1vW0eTsQNdqbeH3nw9GOeqZT8=",
+    "key": "5_duKCNg7_GOSX8Iv5PXcOybj22jxEaaNXEByLJxLeQ=",
+    "iv": "tya3R1OouLJWv53AnyS1rQ==",
+    "url": "http://api.perish.me/perishables/4xX-tWXrZtEbPmA5gj1vW0eTsQNdqbeH3nw9GOeqZT8=",
+    "download_url": "http://api.perish.me/perishables/4xX-tWXrZtEbPmA5gj1vW0eTsQNdqbeH3nw9GOeqZT8=/download"
 }
 ```
+
 ***
-### Get File Info
+
+### Get File Info [GET http://api.perish.me/perishables/{digest}]
+
 #### Request
 ```bash
-curl https://perish-api.herokuapp.com/perishables/dc6c91137119de341c569242c0f70af4148a46c8d73174f3c0fa9befd5352b47
+curl http://api.perish.me/perishables/4xX-tWXrZtEbPmA5gj1vW0eTsQNdqbeH3nw9GOeqZT8=
 ```
+
 #### Response
 ```json
 {
-    "name":"test.mp3",
-    "content_type":"audio/mp3",
-    "size":"7.91 MB",
-    "digest":"dc6c91137119de341c569242c0f70af4148a46c8d73174f3c0fa9befd5352b47",
-    "url":"https://perish-api.herokuapp.com/perishables/dc6c91137119de341c569242c0f70af4148a46c8d73174f3c0fa9befd5352b47",
-    "download_url":"https://perish-api.herokuapp.com/perishables/dc6c91137119de341c569242c0f70af4148a46c8d73174f3c0fa9befd5352b47/download"
+    "name": "perish.png",
+    "content_type": "image/png",
+    "size": "14.3 KB",
+    "digest": "4xX-tWXrZtEbPmA5gj1vW0eTsQNdqbeH3nw9GOeqZT8=",
+    "url": "http://api.perish.me/perishables/4xX-tWXrZtEbPmA5gj1vW0eTsQNdqbeH3nw9GOeqZT8=",
+    "download_url": "http://api.perish.me/perishables/4xX-tWXrZtEbPmA5gj1vW0eTsQNdqbeH3nw9GOeqZT8=/download"
 }
 ```
+
 ***
-### Download File
+
+### Delete File [DELETE http://api.perish.me/perishables/{digest}]
+
 #### Request
 ```bash
-curl -F key=18b3579d0e06edbf740658169a6f8aebea4d4da149d587a71fdb1a1d491cd601 -F iv=88d64b96384ebcc371a5aaf0951069a9 https://perish-api.herokuapp.com/perishables/dc6c91137119de341c569242c0f70af4148a46c8d73174f3c0fa9befd5352b47/download > received.mp3
+curl -X DELETE http://api.perish.me/perishables/4xX-tWXrZtEbPmA5gj1vW0eTsQNdqbeH3nw9GOeqZT8=
 ```
+
 #### Response
+```json
+{
+    "name": "perish.png",
+    "content_type": "image/png",
+    "size": "14.3 KB",
+    "digest": "4xX-tWXrZtEbPmA5gj1vW0eTsQNdqbeH3nw9GOeqZT8=",
+}
+```
+
+***
+
+### Download File [POST http://api.perish.me/perishables/{digest}/download]
+
+#### Request
+```bash
+curl -F key=5_duKCNg7_GOSX8Iv5PXcOybj22jxEaaNXEByLJxLeQ= iv=tya3R1OouLJWv53AnyS1rQ== http://api.perish.me/perishables/4xX-tWXrZtEbPmA5gj1vW0eTsQNdqbeH3nw9GOeqZT8=/download > perish.png
+```
+
+#### Response
+```
 The raw file data.
+```
