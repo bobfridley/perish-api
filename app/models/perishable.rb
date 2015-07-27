@@ -44,7 +44,7 @@ class Perishable < ActiveRecord::Base
   private
 
   def server_must_have_space
-    errors.add(:document_file_size, 'server is full') if Perishable.sum(:document_file_size) + document_file_size > ENV.fetch('SERVER_STORAGE_SIZE_GB', 4).to_f.gigabytes
+    errors.add(:document_file_size, 'server is full') if document_file_size && Perishable.sum(:document_file_size) + document_file_size > ENV.fetch('SERVER_STORAGE_SIZE_GB', 4).to_f.gigabytes
   end
 
   def generate_digest
